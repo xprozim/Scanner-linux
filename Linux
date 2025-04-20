@@ -1,0 +1,94 @@
+ <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scanner Ético</title>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #00ff88;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ff88;
+    }
+    .info {
+      background: #111;
+      border: 1px solid #00ff88;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #00ff88;
+      max-width: 600px;
+      width: 100%;
+      margin-top: 20px;
+      display: none;
+    }
+    .info p {
+      margin: 10px 0;
+    }
+    button {
+      padding: 12px 24px;
+      background-color: transparent;
+      border: 2px solid #00ff88;
+      color: #00ff88;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: 0.3s;
+      text-shadow: 0 0 5px #00ff88;
+    }
+    button:hover {
+      background-color: #00ff88;
+      color: #0f0f0f;
+      text-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Scanner Ético</h1>
+  <button onclick="iniciarScanner()">Entrar na Rede</button>
+  <div class="info" id="info"></div>
+
+  <script>
+    function iniciarScanner() {
+      const info = {
+        dispositivo: navigator.userAgent,
+        navegador: navigator.appName + " " + navigator.appVersion,
+        sistema: navigator.platform,
+        hora: new Date().toLocaleString(),
+      };
+
+      fetch('https://ipapi.co/json/')
+        .then(response => response.json())
+        .then(data => {
+          info.pais = data.country_name;
+          mostrarInfo(info);
+        })
+        .catch(() => {
+          info.pais = 'Desconhecido';
+          mostrarInfo(info);
+        });
+    }
+
+    function mostrarInfo(info) {
+      const div = document.getElementById('info');
+      div.style.display = 'block';
+      div.innerHTML = `
+        <p><strong>Dispositivo:</strong> ${info.dispositivo}</p>
+        <p><strong>Navegador:</strong> ${info.navegador}</p>
+        <p><strong>Sistema Operacional:</strong> ${info.sistema}</p>
+        <p><strong>Hora Local:</strong> ${info.hora}</p>
+        <p><strong>País:</strong> ${info.pais}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
